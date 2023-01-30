@@ -1,26 +1,21 @@
-function sortByKey(arr) {
-  arr.sort((a, b) => (a > b ? 1 : -1));
-}
-
-export default function orderByProps(param1, param2) {
-  const ar = [];
-  const tmp = [];
-  for (const prop in param1) {
-    if (param2.includes(prop)) {
-      ar.push(
-        { key: prop, value: param1[prop] },
-      );
-    } else {
-      tmp.push(prop);
+export default function orderByProps(object, arrStart) {
+  const arrKey = [];
+  for (const el in object) {
+    if ({}.hasOwnProperty.call(object, el)) {
+      arrKey.push(el);
     }
   }
-
-  sortByKey(tmp);
-
-  for (let i = 0; i < tmp.length; i += 1) {
-    ar.push(
-      { key: tmp[i], value: param1[tmp[i]] },
-    );
+  const arrResult = [];
+  arrKey.sort();
+  const arrReverse = arrStart.reverse();
+  for (let i = 0; i < arrReverse.length; i += 1) {
+    const index = arrKey.findIndex((item) => item === arrReverse[i]);
+    arrKey.unshift(...arrKey.splice(index, 1));
   }
-  return ar;
+  for (let i = 0; i < arrKey.length; i += 1) {
+    const k = arrKey[i];
+    const newObject = { key: k, value: object[k] };
+    arrResult.push(newObject);
+  }
+  return arrResult;
 }
